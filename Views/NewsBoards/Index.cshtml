@@ -1,0 +1,86 @@
+﻿@model Lab4.Models.ViewModels.NewsBoardViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Fee
+            </th>
+            <th>
+                Subscribers
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model.NewsBoards) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fee)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subscriptions.Count)
+                </td>
+            <td>
+                <a asp-action="Index" asp-route-id="@item.Id">Select</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="News" asp-route-id="@item.Id" asp-route-title="@item.Title">News</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+
+</table>
+
+@* Selection for if Clients data exists to display table formatted output to the user *@
+@if (Model.Clients != null)
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Customers in Table
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Clients.Count() == 0){
+             <tr> 
+               <td> 
+                    No subscriptions to newsboard
+               </td>
+            </tr>
+    }
+    else{
+            @foreach (var client in Model.Clients)
+            {
+                <tr> 
+                   <td> 
+                        @client.FullName
+                   </td>
+                </tr>
+            }
+    }
+   
+    </tbody>
+    </table>
+}
+
+

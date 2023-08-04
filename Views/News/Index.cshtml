@@ -1,0 +1,51 @@
+﻿@model Lab4.Models.ViewModels.NewsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Show news for newsBoards @Model.NewsBoard.Title</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id="@Model.NewsBoard.Id" asp-route-title="@Model.NewsBoard.Title">Create New</a>
+</p>
+
+<p>
+    <a asp-controller="NewsBoards" asp-action="Index" >Return to list</a>
+</p>
+
+@if(!Model.News.Any()){
+    <p>There are no files to display.</p>
+}
+else{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.News.FirstOrDefault().FileName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.News.FirstOrDefault().ImageUrl)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var news in Model.News)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => news.FileName)
+                </td>
+                <td>
+                    <img src="@news.ImageUrl" style="max-width: 400px;" />
+                </td>
+                <td>
+                     <a asp-action="Delete" asp-route-id="@news.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+

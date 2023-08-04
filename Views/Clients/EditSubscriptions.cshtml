@@ -1,0 +1,69 @@
+﻿@model Lab4.Models.ViewModels.ClientSubscriptionsViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+
+    // needs to pull the client name
+    // needs to pull all the subscriptions avialabel and wether or not the client is in it
+    // when clicked on register should unregister and vice versa
+
+
+}
+
+<h1>Edit</h1>
+
+<h4>Client</h4>
+<hr />
+
+<p>Full Name: @Model.Client.FullName</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>NewsBoard</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            // make list based on cases where id does exist
+            var registeredList = Model.NewsBoards.Where(x => x.Subscriptions.Any(t => t.ClientId == Model.Client.Id));
+            // second list is the inverse of the first
+            var unregisteredList = Model.NewsBoards.Except(registeredList);
+
+            // print the lists so it is grouped
+        }
+
+        @{/* iterate through registered list sorted alphebetically */}
+        @foreach(var item in registeredList.OrderBy(x => x.Title))
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td><a asp-action="DeRegister" asp-route-clientId="@Model.Client.Id" asp-route-newsBoardId="@item.Id">De-Register</a></td>
+            </tr>
+
+        }
+
+        @{/* iterate through unregistered list sorted alphebetically */}
+        @foreach(var item in unregisteredList.OrderBy(x => x.Title))
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td><a asp-action="Register" asp-route-clientId="@Model.Client.Id" asp-route-newsBoardId="@item.Id">Register</a></td>
+            </tr>
+        }
+
+
+    </tbody>
+
+</table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
